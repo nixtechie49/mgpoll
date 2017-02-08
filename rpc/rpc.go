@@ -116,8 +116,8 @@ func (r *RPCClient) GetWork() ([]string, error) {
 	return reply, err
 }
 
-func (r *RPCClient) SetAddress() ([]string, error) {
-	rpcResp, err := r.doPost(r.Url, "setminingaccount", []string{r.Account, r.Password})
+func (r *RPCClient) SetAddress(address string) ([]string, error) {
+	rpcResp, err := r.doPost(r.Url, "setminingaccount", []string{r.Account, r.Password, address})
 	if err != nil {
 		return nil, err
 	}

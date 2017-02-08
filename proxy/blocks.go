@@ -115,7 +115,7 @@ func (s *ProxyServer) fetchBlockTemplate() {
 
 	t := s.currentBlockTemplate()
 
-	rpc.SetAddress()
+	rpc.SetAddress(s.config.Payouts.Address)
 	reply, _ := rpc.GetWork()
 
 	pendingReply, height, diff, err := s.fetchPendingBlock()

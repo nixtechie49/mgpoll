@@ -2,11 +2,12 @@ package proxy
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net"
 	"net/http"
-	"strings"
+	//"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -217,7 +218,8 @@ func (cs *Session) handleMessage(s *ProxyServer, r *http.Request, req *JSONRpcRe
 	}
 
 	vars := mux.Vars(r)
-	login := strings.ToLower(vars["login"])
+	//login := strings.ToLower(vars["login"])
+	login := vars["login"]
 
 	/*
 		//whh
@@ -267,6 +269,7 @@ func (cs *Session) handleMessage(s *ProxyServer, r *http.Request, req *JSONRpcRe
 		cs.sendResult(req.Id, reply)
 	case "eth_submitHashrate":
 		cs.sendResult(req.Id, true)
+		fmt.Println(*req)
 	default:
 		errReply := s.handleUnknownRPC(cs, req.Method)
 		cs.sendError(req.Id, errReply)
