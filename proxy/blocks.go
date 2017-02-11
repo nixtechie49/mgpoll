@@ -139,7 +139,6 @@ func (s *ProxyServer) fetchBlockTemplate() {
 	if t != nil && t.Header == reply[0] {
 		return
 	}
-	vv, _ := rpc.GetBalance("tDS4mL1AGDJSEFhtV93LTLarmBexkUjdhE")
 
 	//pendingReply.Difficulty = util.ToHex(s.config.Proxy.Difficulty)
 
