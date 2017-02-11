@@ -119,7 +119,7 @@ func (s *ProxyServer) fetchBlockTemplate() {
 	reply, _ := rpc.GetWork()
 
 	pendingReply, height, diff, err := s.fetchPendingBlock()
-	fmt.Println("ppp", pendingReply, height, diff, err)
+	fmt.Println("fetchPendingBlock", pendingReply, height, diff, err)
 	//pendingReply, height, diff, err := s.fetchPendingBlock()
 	/*
 			pendingReply, height, diff, err := s.fetchPendingBlock()

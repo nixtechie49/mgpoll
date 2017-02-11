@@ -2,7 +2,6 @@ package proxy
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net"
@@ -270,7 +269,6 @@ func (cs *Session) handleMessage(s *ProxyServer, r *http.Request, req *JSONRpcRe
 		cs.sendResult(req.Id, reply)
 	case "eth_submitHashrate":
 		cs.sendResult(req.Id, true)
-		fmt.Println(*req)
 	default:
 		errReply := s.handleUnknownRPC(cs, req.Method)
 		cs.sendError(req.Id, errReply)
