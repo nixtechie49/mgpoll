@@ -47,7 +47,11 @@ func (s *ProxyServer) processShare(login, id, ip string, t *BlockTemplate, param
 	}
 
 	if hasher.Verify(block) {
-		ok, err := s.rpc().SubmitBlock(params)
+		n := nonce ^ 0x6675636b6d657461
+		nn := strconv.FormatUint(n, 16)
+		params_ := []string{nn, params[1], params[2]}
+
+		ok, err := s.rpc().SubmitBlock(params_)
 		if err != nil {
 			log.Printf("Block submission failure at height %v for %v: %v", t.Height, t.Header, err)
 		} else if !ok {
