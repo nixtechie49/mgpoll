@@ -123,7 +123,7 @@ func (u *PayoutsProcessor) process() {
 		amountInShannon := big.NewInt(amount)
 
 		// Shannon^2 = Wei
-		amountInWei := new(big.Int).Mul(amountInShannon, common.Shannon)
+		//amountInWei := new(big.Int).Mul(amountInShannon, common.Shannon)
 
 		if !u.reachedThreshold(amountInShannon) {
 			continue
@@ -148,9 +148,9 @@ func (u *PayoutsProcessor) process() {
 			u.lastFail = err
 			break
 		}
-		if poolBalance.Cmp(amountInWei) < 0 {
+		if poolBalance.Cmp(amountInShannon) < 0 {
 			err := fmt.Errorf("Not enough balance for payment, need %s Wei, pool has %s Wei",
-				amountInWei.String(), poolBalance.String())
+				amountInShannon.String(), poolBalance.String())
 			u.halt = true
 			u.lastFail = err
 			break
@@ -175,8 +175,8 @@ func (u *PayoutsProcessor) process() {
 			break
 		}
 
-		value := common.BigToHash(amountInWei).Hex()
-		txHash, err := u.rpc.SendTransaction(u.config.Address, login, value)
+		//value := common.BigToHash(amountInWei).Hex()
+		txHash, err := u.rpc.SendTransaction(u.config.Address, login, strconv.FormatInt(amount, 10))
 		if err != nil {
 			log.Printf("Failed to send payment to %s, %v Shannon: %v. Check outgoing tx for %s in block explorer and docs/PAYOUTS.md",
 				login, amount, err, login)

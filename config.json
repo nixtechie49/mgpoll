@@ -7,7 +7,7 @@
 
 	"proxy": {
 		"enabled": true,
-		"listen": "0.0.0.0:8887",
+		"listen": "0.0.0.0:8888",
 		"limitHeadersSize": 1024,
 		"limitBodySize": 256,
 		"behindReverseProxy": false,
@@ -65,12 +65,12 @@
 	"upstream": [
 		{
 			"name": "main",
-			"url": "http://127.0.0.1:8820/rpc",
+		    "url": "http://127.0.0.1:8820/rpc",
 			"timeout": "10s"
 		},
 		{
 			"name": "backup",
-			"url": "http://127.0.0.2:8545",
+		    "url": "http://127.0.0.1:8820/rpc",
 			"timeout": "10s"
 		}
 	],
@@ -83,15 +83,15 @@
 	},
 
 	"unlocker": {
-		"enabled": false,
+		"enabled": true,
 		"poolFee": 1.0,
 		"poolFeeAddress": "",
 		"donate": true,
-		"depth": 120,
-		"immatureDepth": 20,
+		"depth": 100,
+		"immatureDepth": 16,
 		"keepTxFees": false,
 		"interval": "10m",
-		"daemon": "http://127.0.0.1:8545",
+		"daemon": "http://127.0.0.1:8820/rpc",
 		"timeout": "10s"
 	},
 
@@ -101,7 +101,7 @@
 		"interval": "120m",
 		"daemon": "http://127.0.0.1:8820/rpc",
 		"timeout": "10s",
-		"address": "tDS4mL1AGDJSEFhtV93LTLarmBexkUjdhE",
+		"address": "t9VM94EFMUqG7eKu8rnAFiFwJJhTFCYJ9u",
 		"gas": "21000",
 		"gasPrice": "50000000000",
 		"autoGas": true,
