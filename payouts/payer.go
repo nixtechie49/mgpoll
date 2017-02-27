@@ -245,8 +245,6 @@ func (self PayoutsProcessor) checkPeers() bool {
 }
 
 func (self PayoutsProcessor) reachedThreshold(amount *big.Int) bool {
-	//whh
-	return big.NewInt(1).Cmp(amount) < 0
 	return big.NewInt(self.config.Threshold).Cmp(amount) < 0
 }
 

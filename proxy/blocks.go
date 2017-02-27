@@ -110,8 +110,6 @@ func (s *ProxyServer) fetchBlockTemplate() {
 
 func (s *ProxyServer) fetchBlockTemplate() {
 	rpc := s.rpc()
-	//height, _ := rpc.GetHeight()
-	//whh, _ := rpc.GetBlockByHeight(0)
 
 	t := s.currentBlockTemplate()
 

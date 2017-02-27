@@ -3,12 +3,13 @@ package payouts
 import (
 	"fmt"
 	"log"
+	"math"
 	"math/big"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
+	//"github.com/ethereum/go-ethereum/common"
 
 	"github.com/sammy007/open-ethereum-pool/rpc"
 	"github.com/sammy007/open-ethereum-pool/storage"
@@ -26,12 +27,11 @@ type UnlockerConfig struct {
 	Interval       string  `json:"interval"`
 	Daemon         string  `json:"daemon"`
 	Timeout        string  `json:"timeout"`
+	Account        string
+	Password       string
 }
 
 const minDepth = 16
-
-var constReward = common.Big("200000000")
-var uncleReward = new(big.Int).Div(constReward, new(big.Int).SetInt64(32))
 
 // Donate 10% from pool fees to developers
 const donationFee = 10.0
@@ -56,7 +56,7 @@ func NewBlockUnlocker(cfg *UnlockerConfig, backend *storage.RedisClient) *BlockU
 		log.Fatalf("Immature depth can't be < %v, your depth is %v", minDepth, cfg.ImmatureDepth)
 	}
 	u := &BlockUnlocker{config: cfg, backend: backend}
-	u.rpc = rpc.NewRPCClient("BlockUnlocker", cfg.Daemon, "whh", "123456", cfg.Timeout)
+	u.rpc = rpc.NewRPCClient("BlockUnlocker", cfg.Daemon, cfg.Account, cfg.Password, cfg.Timeout)
 	return u
 }
 
@@ -205,14 +205,13 @@ func matchCandidate(block *rpc.GetBlockReply, candidate *storage.BlockData) bool
 }
 
 func (u *BlockUnlocker) handleBlock(block *rpc.GetBlockReply, candidate *storage.BlockData) error {
-	// Initial 5 Ether static reward
-	reward := new(big.Int).Set(constReward)
-
 	correctHeight, err := strconv.ParseInt(strings.Replace(block.Number, "0x", "", -1), 16, 64)
 	if err != nil {
 		return err
 	}
 	candidate.Height = correctHeight
+
+	reward := big.NewInt(int64(3 * 100000000 * math.Pow(0.95, float64(correctHeight*1.0)/500000)))
 
 	/*
 		// Add TX fees
@@ -227,26 +226,8 @@ func (u *BlockUnlocker) handleBlock(block *rpc.GetBlockReply, candidate *storage
 		}
 	*/
 
-	// Add reward for including uncles
-	//rewardForUncles := big.NewInt(0).Mul(uncleReward, big.NewInt(int64(len(block.Uncles))))
-	//reward.Add(reward, rewardForUncles)
-
 	candidate.Orphan = false
 	candidate.Hash = block.Hash
-	candidate.Reward = reward
-	return nil
-}
-
-func handleUncle(height int64, uncle *rpc.GetBlockReply, candidate *storage.BlockData) error {
-	uncleHeight, err := strconv.ParseInt(strings.Replace(uncle.Number, "0x", "", -1), 16, 64)
-	if err != nil {
-		return err
-	}
-	reward := getUncleReward(uncleHeight, height)
-	candidate.Height = height
-	candidate.UncleHeight = uncleHeight
-	candidate.Orphan = false
-	candidate.Hash = uncle.Hash
 	candidate.Reward = reward
 	return nil
 }
@@ -509,13 +490,6 @@ func weiToShannonInt64(wei *big.Rat) int64 {
 	value, _ := strconv.ParseInt(wei.FloatString(0), 10, 64)
 	return value
 
-}
-
-func getUncleReward(uHeight, height int64) *big.Int {
-	reward := new(big.Int).Set(constReward)
-	reward.Mul(big.NewInt(uHeight+8-height), reward)
-	reward.Div(reward, big.NewInt(8))
-	return reward
 }
 
 func (u *BlockUnlocker) getExtraRewardForTx(block *rpc.GetBlockReply) (*big.Int, error) {

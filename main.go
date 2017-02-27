@@ -69,6 +69,8 @@ func readConfig(cfg *proxy.Config) {
 	}
 	cfg.Payouts.Account = cfg.Account
 	cfg.Payouts.Password = cfg.Password
+	cfg.BlockUnlocker.Account = cfg.Account
+	cfg.BlockUnlocker.Password = cfg.Password
 }
 
 func main() {
