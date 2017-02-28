@@ -122,9 +122,6 @@ func (u *PayoutsProcessor) process() {
 		amount, _ := u.backend.GetBalance(login)
 		amountInShannon := big.NewInt(amount)
 
-		// Shannon^2 = Wei
-		//amountInWei := new(big.Int).Mul(amountInShannon, common.Shannon)
-
 		if !u.reachedThreshold(amountInShannon) {
 			continue
 		}
