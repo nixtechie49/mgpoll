@@ -257,7 +257,7 @@ func (r *RPCClient) SendTransaction(from, to, value string) (string, error) {
 	if err != nil {
 		return reply.Hash, err
 	}
-	err = json.Unmarshal(*rpcResp.Result, &reply)
+	err = json.Unmarshal(*rpcResp.Transaction, &reply)
 	if err != nil {
 		return reply.Hash, err
 	}

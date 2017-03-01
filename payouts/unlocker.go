@@ -159,7 +159,7 @@ func matchCandidate(block *rpc.GetBlockReply, candidate *storage.BlockData) bool
 }
 
 func (u *BlockUnlocker) handleBlock(block *rpc.GetBlockReply, candidate *storage.BlockData) error {
-	correctHeight, err := strconv.ParseInt(strings.Replace(block.Number, "0x", "", -1), 16, 64)
+    correctHeight, err := strconv.ParseInt(block.Number, 10, 64)
 	if err != nil {
 		return err
 	}
