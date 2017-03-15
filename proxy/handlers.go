@@ -6,7 +6,7 @@ import (
 
 	"log"
 	"regexp"
-	"strings"
+//	"strings"
 )
 
 // Allow only lowercase hexadecimal with 0x prefix
@@ -20,7 +20,8 @@ func (s *ProxyServer) handleLoginRPC(cs *Session, params []string, id string) (b
 		return false, &ErrorReply{Code: -1, Message: "Invalid params"}
 	}
 
-	login := strings.ToLower(params[0])
+	//login := strings.ToLower(params[0])
+	login := params[0]
 	if !util.IsValidHexAddress(login) {
 		return false, &ErrorReply{Code: -1, Message: "Invalid login"}
 	}
@@ -38,8 +39,8 @@ func (s *ProxyServer) handleGetWorkRPC(cs *Session) ([]string, *ErrorReply) {
 	if t == nil || len(t.Header) == 0 || s.isSick() {
 		return nil, &ErrorReply{Code: 0, Message: "Work not ready"}
 	}
-	//return []string{t.Header, t.Seed, s.diff}, nil
-	return []string{t.Header, t.Seed, t.Target}, nil
+	return []string{t.Header, t.Seed, s.diff}, nil
+//	return []string{t.Header, t.Seed, t.Target}, nil
 }
 
 // Stratum
