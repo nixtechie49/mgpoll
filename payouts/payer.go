@@ -196,14 +196,14 @@ func (u *PayoutsProcessor) process() {
 		log.Printf("Paid %v Shannon to %v, TxHash: %v", amount, login, txHash)
 
 		// Wait for TX confirmation before further payouts
-		for {
-			log.Printf("Waiting for tx confirmation: %v", txHash)
-			time.Sleep(txCheckInterval)
-			_, err := u.rpc.GetTxReceipt(txHash)
-			if err != nil {
-				log.Printf("Failed to get tx receipt for %v: %v", txHash, err)
-			}
-		}
+		//for {
+		//	log.Printf("Waiting for tx confirmation: %v", txHash)
+		//	time.Sleep(txCheckInterval)
+		//	_, err := u.rpc.GetTxReceipt(txHash)
+		//	if err != nil {
+		//		log.Printf("Failed to get tx receipt for %v: %v", txHash, err)
+		//	}
+		//}
 		log.Printf("Payout tx for %s confirmed: %s", login, txHash)
 	}
 
