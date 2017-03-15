@@ -10,11 +10,11 @@ import (
 )
 
 var pow256 = common.BigPow(2, 256)
-var addressPattern = regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
+var addressPattern = regexp.MustCompile("^0xM[0-9a-zA-Z]{10,50}$")
 var zeroHash = regexp.MustCompile("^0?x?0+$")
 
 func IsValidHexAddress(s string) bool {
-	if IsZeroHash(s) || !addressPattern.MatchString(s) {
+	if !addressPattern.MatchString(s) {
 		return false
 	}
 	return true
